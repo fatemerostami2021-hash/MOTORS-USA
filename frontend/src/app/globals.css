@@ -1,0 +1,25 @@
+@import "tailwindcss";
+:root { --ink:#121110; --coal:#1b1917; --card:#252220; --bone:#f1ede6; }
+:root.light { --ink:#f6f3ee; --coal:#ebe5db; --card:#ffffff; --bone:#1a1816; }
+@theme inline {
+  --color-ink: var(--ink); --color-coal: var(--coal); --color-card: var(--card); --color-bone: var(--bone); --color-flag: #d7263d;
+  --font-display: var(--fd); --font-heading: var(--fh); --font-mono: var(--fm); --font-sans: var(--fs);
+  --animate-marquee: marquee 45s linear infinite;
+}
+:root { --fd:"Orbitron",sans-serif; --fh:"JetBrains Mono",monospace; --fm:"JetBrains Mono",monospace; --fs:"Open Sans",system-ui,sans-serif; }
+:root[lang="fa"] { --fd:"Vazirmatn",sans-serif; --fh:"Vazirmatn",sans-serif; --fm:"Vazirmatn",sans-serif; --fs:"Vazirmatn",sans-serif; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+html { background: var(--ink); color: var(--bone); font-size: 17px; transition: background .4s; }
+body { font-family: var(--fs); font-size: 1.05rem; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+:focus-visible { outline: 2px solid #d7263d; outline-offset: 3px; }
+.hscroll::-webkit-scrollbar { display: none; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+.font-heading { word-spacing: .3em; letter-spacing: .01em; line-height: 1.15; }
+.wave > span, .wave span span { display: inline-block; }
+.wave:hover span[style] { animation: hop .6s ease-in-out both; animation-delay: calc(var(--i) * 45ms); }
+@keyframes hop { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-7px); } 70% { transform: translateY(3px); } }
+.logo-blink { animation: blink 1.6s ease-in-out infinite; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }

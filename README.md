@@ -1,8 +1,9 @@
 # Motors USA
-Next.js (App Router, TS, Tailwind v4) + GSAP/ScrollTrigger + Lenis + Three.js. Prisma schema in prisma/schema.prisma.
+frontend/ Next.js (port 3000) · backend/ Express + PostgreSQL (port 4000)
 
-    npm install
-    npm run dev        # http://localhost:3000
+    npm run setup      # once
+    cp backend/.env.example backend/.env     # add DATABASE_URL later
+    npm run dev        # runs both
 
-Demo data: src/data/vehicles.ts (replace with real stock). Hero video: public/hero.mp4.
-Database later: npm i prisma @prisma/client && npx prisma init && npx prisma migrate dev
+Database: put DATABASE_URL in backend/.env, then: npm run db:init --prefix backend
+Power BI connects to the views in backend/db/views.sql
