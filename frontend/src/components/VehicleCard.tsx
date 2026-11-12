@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import Image from "next/image";
+import Image from "./SafeImage";
 import { Vehicle } from "@/data/vehicles";
 import { brandSlug } from "@/data/brands-util";
 import BrandIcon from "./BrandIcon";

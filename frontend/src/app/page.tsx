@@ -4,6 +4,7 @@ import Featured from "@/components/Featured";
 import Wheel3D from "@/components/Wheel3D";
 import BrandMarquee from "@/components/BrandMarquee";
 import Tiles from "@/components/Tiles";
+import News from "@/components/News";
 import { usePrefs } from "@/components/Prefs";
 import { Fade, SplitHeading, Counter } from "@/components/Reveal";
 import { vehicles } from "@/data/vehicles";
@@ -30,6 +31,7 @@ export default function Home() {
       <BrandMarquee />
       <Featured items={avail} />
       <Tiles />
+      <News />
     </>
   );
 }

@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+import Image from "./SafeImage";
 import { usePrefs } from "./Prefs";
 import { Fade } from "./Reveal";
 export default function Newsletter() {

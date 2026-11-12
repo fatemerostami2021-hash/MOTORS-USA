@@ -24,8 +24,9 @@ export default function Wheel3D() {
     const size = () => { const w = el.clientWidth, h = el.clientHeight; renderer.setSize(w, h); cam.aspect = w / h; cam.updateProjectionMatrix(); };
     size(); addEventListener("resize", size);
     const ctx = gsap.context(() => { gsap.to(g.rotation, { z: Math.PI * 3, y: 0.5, ease: "none", scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: 1 } }); });
-    const tick = () => renderer.render(scene, cam); gsap.ticker.add(tick);
-    return () => { gsap.ticker.remove(tick); ctx.revert(); removeEventListener("resize", size); renderer.dispose(); el.innerHTML = ""; };
+    let visible = true; const vio = new IntersectionObserver(([e]) => { visible = e.isIntersecting; }); vio.observe(el);
+    const tick = () => { if (visible) renderer.render(scene, cam); }; gsap.ticker.add(tick);
+    return () => { vio.disconnect(); gsap.ticker.remove(tick); ctx.revert(); removeEventListener("resize", size); renderer.dispose(); el.innerHTML = ""; };
   }, []);
   return <div ref={box} className="h-[420px] w-full" aria-hidden />;
 }

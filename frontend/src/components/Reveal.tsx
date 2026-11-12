@@ -1,44 +1,38 @@
 "use client";
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-// Splits text into letters that slide up on scroll. Use for headlines.
+import { useEffect, useLayoutEffect, useRef } from "react";
+const useIso = typeof window !== "undefined" ? useLayoutEffect : useEffect;
+let io: IntersectionObserver | null = null;
+// Marks an element as visible (data-in) the first time it scrolls into view. Without JS or IntersectionObserver everything stays visible.
+export function reveal(el: Element) {
+  if (typeof IntersectionObserver === "undefined") { el.setAttribute("data-in", ""); return; }
+  io ??= new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.setAttribute("data-in", ""); io!.unobserve(e.target); } }), { rootMargin: "0px 0px -6% 0px", threshold: 0.05 });
+  io.observe(el);
+}
 export function SplitHeading({ text, className = "", as: Tag = "h2" }: { text: string; className?: string; as?: "h1" | "h2" | "h3" }) {
   const ref = useRef<HTMLHeadingElement>(null);
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    const el = ref.current!; const chars = el.querySelectorAll("[data-c]");
-    const ctx = gsap.context(() => {
-      gsap.fromTo(chars, { yPercent: 110, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.9, ease: "power4.out", stagger: 0.025, scrollTrigger: { trigger: el, start: "top 85%" } });
-    }, el);
-    return () => ctx.revert();
-  }, []);
+  useIso(() => { reveal(ref.current!); }, []);
   return (
-    <Tag ref={ref} aria-label={text} className={className}>
-      {text.split(" ").map((w, i) => (
-        <span key={i} aria-hidden className="inline-block overflow-hidden align-bottom mr-[0.25em]">
-          {w.split("").map((c, j) => <span key={j} data-c className="inline-block">{c}</span>)}
-        </span>
-      ))}
+    <Tag ref={ref} data-split aria-label={text} className={className}>
+      {text.split(" ").map((w, i) => (<span key={i} aria-hidden className="me-[0.25em] inline-block overflow-hidden align-bottom">{w.split("").map((c, j) => <span key={j} data-c style={{ ["--i" as string]: i * 4 + j }}>{c}</span>)}</span>))}
     </Tag>
   );
 }
-export function Fade({ children, className = "", y = 40 }: { children: React.ReactNode; className?: string; y?: number }) {
+export function Fade({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    const ctx = gsap.context(() => { gsap.fromTo(ref.current, { y, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out", scrollTrigger: { trigger: ref.current, start: "top 88%" } }); });
-    return () => ctx.revert();
-  }, [y]);
-  return <div ref={ref} className={className}>{children}</div>;
+  useIso(() => { reveal(ref.current!); }, []);
+  return <div ref={ref} data-reveal className={className}>{children}</div>;
 }
 export function Counter({ to, suffix = "", prefix = "", raw = false }: { to: number; suffix?: string; prefix?: string; raw?: boolean }) {
   const ref = useRef<HTMLSpanElement>(null);
+  const fmt = (n: number) => prefix + (raw ? String(n) : n.toLocaleString("en-US")) + suffix;
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    const o = { v: 0 };
-    const ctx = gsap.context(() => { gsap.to(o, { v: to, duration: 2, ease: "power2.out", scrollTrigger: { trigger: ref.current, start: "top 90%" }, onUpdate: () => { if (ref.current) ref.current.textContent = prefix + (raw ? String(Math.round(o.v)) : Math.round(o.v).toLocaleString("en-US")) + suffix; } }); });
-    return () => ctx.revert();
-  }, [to, suffix, prefix]);
-  return <span ref={ref}>{prefix}0{suffix}</span>;
+    const el = ref.current!; if (typeof IntersectionObserver === "undefined" || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let raf = 0; const o = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return; o.disconnect(); const t0 = performance.now();
+      const tick = (t: number) => { const p = Math.min(1, (t - t0) / 1600); el.textContent = fmt(Math.round(to * (1 - Math.pow(1 - p, 3)))); if (p < 1) raf = requestAnimationFrame(tick); };
+      raf = requestAnimationFrame(tick);
+    }, { threshold: 0.4 });
+    o.observe(el); return () => { o.disconnect(); cancelAnimationFrame(raf); };
+  }, [to, suffix, prefix, raw]);
+  return <span ref={ref}>{fmt(to)}</span>;
 }

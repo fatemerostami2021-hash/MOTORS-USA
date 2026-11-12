@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import Image from "next/image";
+import Image from "@/components/SafeImage";
 import { vehicles, Vehicle } from "@/data/vehicles";
 import { usePrefs } from "@/components/Prefs";
 export default function Compare() {

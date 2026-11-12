@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePrefs } from "./Prefs";
 import CarSearch from "./CarSearch";
 import { IranFlag, UKFlag } from "./Flags";
@@ -13,6 +13,7 @@ export default function Header() {
   const btn = "flex h-12 items-center gap-2 px-2 text-sm font-bold tracking-widest transition hover:text-flag";
   const ic = { width: 24, height: 24, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
   const close = () => setPanel(null);
+  useEffect(() => { document.documentElement.style.overflow = panel ? "hidden" : ""; return () => { document.documentElement.style.overflow = ""; }; }, [panel]);
   return (
     <>
       <header className="sticky top-0 z-50 grid grid-cols-[1fr_auto_1fr] items-center bg-ink/80 px-4 py-3 backdrop-blur-md md:px-12">
@@ -29,7 +30,7 @@ export default function Header() {
         </div>
       </header>
       {panel && (
-        <div role="dialog" aria-modal className="fixed inset-0 z-[100] overflow-y-auto bg-ink px-5 py-6 md:px-16">
+        <div role="dialog" aria-modal data-lenis-prevent className="fixed inset-0 z-[100] overflow-y-auto overscroll-contain bg-ink px-5 py-6 md:px-16">
           <div className="flex items-center justify-between"><button onClick={close} className={btn}>✕ {t.close}</button><Logo /><span className="w-12" /></div>
           {panel === "search" ? <div className="mx-auto mt-10 max-w-5xl"><CarSearch onPick={close} autoFocus /></div> : (
             <div className="mx-auto mt-8 grid max-w-6xl gap-10 lg:grid-cols-[1fr_1fr]">

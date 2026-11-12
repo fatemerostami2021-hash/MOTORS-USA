@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+import Image from "./SafeImage";
 import { useState } from "react";
 export default function Gallery({ images, video, alt }: { images: string[]; video?: string; alt: string }) {
   const items = [...images, ...(video ? ["video"] : [])]; const [i, setI] = useState(0);

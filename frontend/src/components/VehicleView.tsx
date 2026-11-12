@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import Image from "next/image";
+import Image from "./SafeImage";
 import Gallery from "./Gallery";
 import { usePrefs } from "./Prefs";
 import { Vehicle } from "@/data/vehicles";

@@ -1,16 +1,14 @@
 "use client";
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-// Children rise in as batches while scrolling (ScrollTrigger.batch).
+import { useEffect, useLayoutEffect, useRef } from "react";
+import { reveal } from "./Reveal";
+const useIso = typeof window !== "undefined" ? useLayoutEffect : useEffect;
+// Children fade/slide in one after another as they enter the viewport.
 export default function Stagger({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const kids = Array.from(ref.current!.children); if (!kids.length) return; gsap.set(kids, { y: 70, opacity: 0, scale: 0.95 });
-    const st = ScrollTrigger.batch(kids, { start: "top 92%", onEnter: b => gsap.to(b, { y: 0, opacity: 1, scale: 1, duration: 0.9, ease: "power3.out", stagger: 0.12, overwrite: true }) });
-    return () => { st.forEach(s => s.kill()); gsap.set(kids, { clearProps: "all" }); };
-  }, []);
+  useIso(() => {
+    const kids = Array.from(ref.current!.children) as HTMLElement[];
+    kids.forEach((k, i) => { k.setAttribute("data-reveal", ""); k.style.setProperty("--d", `${(i % 5) * 90}ms`); reveal(k); });
+    return () => kids.forEach(k => { k.removeAttribute("data-reveal"); k.removeAttribute("data-in"); });
+  }, [children]);
   return <div ref={ref} className={className}>{children}</div>;
 }
