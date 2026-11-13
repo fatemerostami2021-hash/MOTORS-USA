@@ -15,3 +15,5 @@ CREATE OR REPLACE VIEW v_vehicle_interest AS
          count(*) FILTER (WHERE e.type IN ('call','whatsapp','inquiry')) AS contact_clicks
   FROM events e LEFT JOIN vehicles v ON v.slug = e.vehicle_slug
   WHERE e.vehicle_slug IS NOT NULL GROUP BY 1, 2, 3;
+CREATE OR REPLACE VIEW v_inquiries_daily AS
+  SELECT created_at::date AS day, status, count(*) AS inquiries FROM inquiries GROUP BY 1, 2;

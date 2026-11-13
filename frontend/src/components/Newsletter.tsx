@@ -1,9 +1,12 @@
 "use client";
 import Image from "./SafeImage";
+import { usePathname } from "next/navigation";
+import { site } from "@/data/site";
 import { usePrefs } from "./Prefs";
 import { Fade } from "./Reveal";
 export default function Newsletter() {
-  const { t } = usePrefs();
+  const { t } = usePrefs(); const path = usePathname();
+  if (path === "/contact" || path === "/sell-your-car") return null;
   return (
     <section className="bg-ink px-6 py-16 md:px-12">
       <Fade className="mx-auto grid max-w-6xl items-center gap-8 border border-bone/15 bg-coal p-8 md:grid-cols-2 md:p-12">
@@ -16,7 +19,7 @@ export default function Newsletter() {
             <button aria-label="Subscribe" className="grid h-11 w-11 place-items-center rounded-full bg-flag text-white">›</button>
           </form>
         </div>
-        <div className="relative aspect-[16/10] overflow-hidden rounded-xl"><Image src="/cars/lamborghini-revuelto.webp" alt="" fill sizes="(min-width:768px) 40vw, 90vw" className="object-cover" /><div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" /></div>
+        <div className="relative aspect-[16/10] overflow-hidden rounded-xl"><Image src={site.newsletterImage} alt="" fill sizes="(min-width:768px) 40vw, 90vw" className="object-cover" /><div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" /></div>
       </Fade>
     </section>
   );

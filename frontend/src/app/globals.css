@@ -11,8 +11,6 @@
 @keyframes marquee { to { transform: translateX(-50%); } }
 html { background: var(--ink); color: var(--bone); font-size: 17px; transition: background .4s; }
 body { font-family: var(--fs); font-size: 1.05rem; line-height: 1.7; -webkit-font-smoothing: antialiased; }
-html.lenis, html.lenis body { height: auto; }
-.lenis.lenis-smooth { scroll-behavior: auto !important; }
 :focus-visible { outline: 2px solid #d7263d; outline-offset: 3px; }
 .hscroll::-webkit-scrollbar { display: none; }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
@@ -31,3 +29,7 @@ html.js [data-split] [data-c] { display: inline-block; opacity: 0; transform: tr
 html.js [data-split][data-in] [data-c] { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { html.js [data-reveal], html.js [data-split] [data-c] { opacity: 1 !important; transform: none !important; } }
 html { scroll-behavior: auto; }
+
+/* Grids default to ONE shrinkable column so wide children (canvas, long words) can never stretch the page on phones. */
+@layer base { .grid { grid-template-columns: minmax(0, 1fr); } }
+html, body { max-width: 100%; overflow-x: clip; }

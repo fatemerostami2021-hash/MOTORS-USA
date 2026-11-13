@@ -11,8 +11,6 @@ export default function Hero() {
     gsap.registerPlugin(ScrollTrigger);
     const ctx = gsap.context(() => {
       gsap.from("[data-h]", { yPercent: 110, opacity: 0, duration: 1.1, ease: "power4.out", stagger: 0.12, delay: 0.2 });
-      gsap.to("[data-video]", { scale: 1.15, yPercent: 8, ease: "none", scrollTrigger: { trigger: root.current, start: "top top", end: "bottom top", scrub: true } });
-      gsap.to("[data-copy]", { yPercent: -40, opacity: 0, ease: "none", scrollTrigger: { trigger: root.current, start: "top top", end: "70% top", scrub: true } });
     }, root);
     return () => ctx.revert();
   }, []);

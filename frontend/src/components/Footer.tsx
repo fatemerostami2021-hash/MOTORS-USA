@@ -20,7 +20,7 @@ export default function Footer() {
   const lk = "block py-1 text-bone/80 hover:text-flag";
   const cols: [string, [string, string][]][] = [
     [t.cars.toUpperCase(), [[t.available, "/inventory"], [t.soldCars, "/inventory?status=sold"], [t.compare, "/compare"], [t.sell, "/sell-your-car"]]],
-    [t.discover, [[t.brands, "/brands"], [t.journal, "/journal"]]],
+    [t.discover, [[t.brands, "/brands"], [t.shop, "/shop"], [t.media, "/media"], [t.newsNav, "/journal"]]],
     [t.company, [[t.about2, "/about"], [t.contact, "/contact"], [t.privacy, "/privacy"], [t.terms, "/terms"]]],
   ];
   return (

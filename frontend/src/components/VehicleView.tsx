@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Image from "./SafeImage";
 import Gallery from "./Gallery";
+import CarVideo from "./CarVideo";
 import { usePrefs } from "./Prefs";
 import { Vehicle } from "@/data/vehicles";
 import { Article } from "@/data/articles";
@@ -21,7 +22,8 @@ export default function VehicleView({ v, same, art }: { v: Vehicle; same: Vehicl
       {v.tagline && <p className="mt-2 text-lg text-bone/70">{v.tagline[lang]}</p>}
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_380px]">
         <div>
-          <Gallery images={v.gallery} video={v.video} alt={name} />
+          <Gallery images={v.gallery} alt={name} />
+          {v.video && <section className="mt-10"><h2 className="mb-4 font-heading text-2xl font-bold">{t.videoTitle}</h2><CarVideo src={v.video} title={name} label="Sound" /></section>}
           <article className="mt-10 rounded-xl bg-card p-6 md:p-10">
             <h2 className="font-heading text-2xl font-bold"><bdi dir="ltr">{bn(v.make)} {v.model}</bdi></h2>
             <p className="mt-4 text-bone/80">{t.overview({ year: plain(v.year), make: bn(v.make), model: v.model, body: tr(v.body), engine: v.engine, hp: nf(v.hp), transmission: tr(v.transmission), accel: v.accel ? nf(v.accel) : null, top: v.top ? nf(v.top) : null })}</p>
@@ -42,7 +44,7 @@ export default function VehicleView({ v, same, art }: { v: Vehicle; same: Vehicl
               <a href={`tel:${site.phone}`} data-track="call" data-slug={v.slug} className="rounded-full bg-flag py-3 text-white">{t.call}</a></div>
           </div>
           <Link href={`/journal/${art.slug}`} className="group block overflow-hidden rounded-xl bg-card">
-            <div className="relative aspect-video"><Image src={v.image} alt="" fill sizes="380px" className="object-cover transition duration-700 group-hover:scale-105" /><span className="absolute start-3 top-3 bg-black px-2 py-1 text-xs text-white">{t.articleBadge}</span></div>
+            <div className="relative aspect-video"><Image src={art.image} alt="" fill sizes="380px" className="object-cover transition duration-700 group-hover:scale-105" /><span className="absolute start-3 top-3 bg-black px-2 py-1 text-xs text-white">{t.articleBadge}</span></div>
             <div className="p-5"><p className="font-mono text-xs text-bone/60">{art.date}</p><h3 className="mt-1 font-heading text-xl font-bold">{lang === "fa" ? art.titleFa : art.title}</h3><p className="mt-2 text-sm text-bone/70">{lang === "fa" ? art.excerptFa : art.excerpt}</p></div>
           </Link>
         </aside>

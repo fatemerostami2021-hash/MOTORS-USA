@@ -6,6 +6,7 @@ import { z } from "zod";
 import { query } from "./db.js";
 const lead = z.object({ email: z.string().email(), type: z.string().max(50).default("newsletter") });
 const sell = z.object({ make: z.string().min(1).max(80), model: z.string().min(1).max(80), year: z.coerce.number().int().min(1900).max(2100), mileage: z.coerce.number().min(0), desiredPrice: z.coerce.number().optional(), contactName: z.string().min(2).max(120), contactPhone: z.string().min(5).max(40) });
+const inq = z.object({ name: z.string().trim().min(2).max(120), email: z.string().trim().email().max(160), phone: z.string().trim().max(40).optional(), message: z.string().trim().min(5).max(2000) });
 const evt = z.object({ type: z.enum(["page_view","call","whatsapp","inquiry","compare"]), path: z.string().max(200).optional(), vehicleSlug: z.string().max(120).optional() });
 export function createApp() {
   const app = express(); const front = process.env.FRONTEND_URL || "http://localhost:3100";
@@ -23,6 +24,11 @@ export function createApp() {
     const p = sell.safeParse(req.body); if (!p.success) return res.status(400).json({ error: "Invalid data" });
     const d = p.data;
     await query("INSERT INTO sell_submissions (make, model, year, mileage, desired_price, contact_name, contact_phone) VALUES ($1,$2,$3,$4,$5,$6,$7)", [d.make, d.model, d.year, d.mileage, d.desiredPrice ?? null, d.contactName, d.contactPhone]);
+    res.json({ ok: true });
+  } catch (e) { next(e); } });
+  app.post("/api/inquiries", async (req, res, next) => { try {
+    const p = inq.safeParse(req.body); if (!p.success) return res.status(400).json({ error: "Invalid data" });
+    await query("INSERT INTO inquiries (name, email, phone, message) VALUES ($1, lower($2), $3, $4)", [p.data.name, p.data.email, p.data.phone ?? null, p.data.message]);
     res.json({ ok: true });
   } catch (e) { next(e); } });
   app.post("/api/events", async (req, res, next) => { try {

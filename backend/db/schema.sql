@@ -40,3 +40,12 @@ CREATE TABLE IF NOT EXISTS events (
   created_at   TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS idx_events_type_day ON events (type, created_at);
+CREATE TABLE IF NOT EXISTS inquiries (
+  id         SERIAL PRIMARY KEY,
+  name       TEXT NOT NULL,
+  email      TEXT NOT NULL,
+  phone      TEXT,
+  message    TEXT NOT NULL,
+  status     TEXT NOT NULL DEFAULT 'new',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);

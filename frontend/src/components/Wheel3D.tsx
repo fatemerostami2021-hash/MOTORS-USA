@@ -21,12 +21,12 @@ export default function Wheel3D() {
     scene.add(new THREE.AmbientLight(0xffffff, 0.5));
     const key = new THREE.DirectionalLight(0xffffff, 3); key.position.set(3, 3, 5); scene.add(key);
     const rim = new THREE.PointLight(0xd7263d, 40, 12); rim.position.set(-3, -1, 2); scene.add(rim);
-    const size = () => { const w = el.clientWidth, h = el.clientHeight; renderer.setSize(w, h); cam.aspect = w / h; cam.updateProjectionMatrix(); };
+    const size = () => { const w = el.clientWidth, h = el.clientHeight; renderer.setSize(w, h, false); renderer.domElement.style.cssText = "width:100%;height:100%;display:block"; cam.aspect = w / h; cam.updateProjectionMatrix(); };
     size(); addEventListener("resize", size);
     const ctx = gsap.context(() => { gsap.to(g.rotation, { z: Math.PI * 3, y: 0.5, ease: "none", scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: 1 } }); });
     let visible = true; const vio = new IntersectionObserver(([e]) => { visible = e.isIntersecting; }); vio.observe(el);
     const tick = () => { if (visible) renderer.render(scene, cam); }; gsap.ticker.add(tick);
     return () => { vio.disconnect(); gsap.ticker.remove(tick); ctx.revert(); removeEventListener("resize", size); renderer.dispose(); el.innerHTML = ""; };
   }, []);
-  return <div ref={box} className="h-[420px] w-full" aria-hidden />;
+  return <div ref={box} className="h-[280px] w-full overflow-hidden md:h-[420px]" aria-hidden />;
 }
