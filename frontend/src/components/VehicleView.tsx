@@ -8,10 +8,12 @@ import { Vehicle } from "@/data/vehicles";
 import { Article } from "@/data/articles";
 import { brandSlug } from "@/data/brands-util";
 import { site } from "@/data/site";
+import { stories, handover } from "@/data/vehicle-stories";
 export default function VehicleView({ v, same, art }: { v: Vehicle; same: Vehicle[]; art: Article }) {
   const { t, lang, nf, money, bn, tr } = usePrefs();
   const plain = (n: number) => nf(n).replace(/[,٬]/g, "");
   const name = `${bn(v.make)} ${v.model} ${plain(v.year)}`;
+  const story = stories[v.slug];
   const stats: [string, string][] = [[nf(v.hp), t.hp], [v.accel ? nf(v.accel) + (lang === "fa" ? " ثانیه" : "s") : "—", t.acc], [v.top ? nf(v.top) : "—", t.top], [plain(v.year), t.year]];
   const more: [string, string][] = [[t.lMileage, `${nf(v.mileage)} ${t.mi}`], [t.lEngine, v.engine], [t.lTrans, tr(v.transmission)], [t.lFuel, tr(v.fuel)], [t.lBody, tr(v.body)], ...(v.cc ? [[t.lDisp, `${nf(v.cc)} cc`] as [string, string]] : []), ...(v.iceHp ? [[t.lIce, v.iceHp] as [string, string]] : []), ...(v.motors ? [[t.lMotors, nf(v.motors)] as [string, string]] : []), ...(v.battery ? [[t.lBattery, v.battery] as [string, string]] : []), ...(v.drive ? [[t.lDrive, v.drive] as [string, string]] : []), ...(v.seats ? [[t.lSeats, nf(v.seats)] as [string, string]] : [])];
   const btn = "rounded-full border border-bone/30 py-3";
@@ -27,7 +29,9 @@ export default function VehicleView({ v, same, art }: { v: Vehicle; same: Vehicl
           <article className="mt-10 rounded-xl bg-card p-6 md:p-10">
             <h2 className="font-heading text-2xl font-bold"><bdi dir="ltr">{bn(v.make)} {v.model}</bdi></h2>
             <p className="mt-4 text-bone/80">{t.overview({ year: plain(v.year), make: bn(v.make), model: v.model, body: tr(v.body), engine: v.engine, hp: nf(v.hp), transmission: tr(v.transmission), accel: v.accel ? nf(v.accel) : null, top: v.top ? nf(v.top) : null })}</p>
-            <h3 className="mt-8 font-heading text-xl font-bold">{t.condHistory}</h3><p className="mt-3 text-bone/80">{t.condText}</p>
+            <h3 className="mt-8 font-heading text-xl font-bold">{t.condHistory}</h3>
+            {story && <p className="mt-3 text-bone/80">{story[lang]}</p>}
+            <p className="mt-3 text-bone/80">{handover[lang]}</p>
             <h3 className="mt-8 font-heading text-xl font-bold">{t.tech}</h3>
             <dl className="mt-3 grid grid-cols-2 gap-px overflow-hidden rounded-lg bg-bone/10">{more.map(([k, val]) => <div key={k} className="bg-coal p-4"><dt className="font-mono text-xs tracking-widest text-bone/60">{k}</dt><dd className="mt-1">{val}</dd></div>)}</dl>
             <p className="mt-6 text-xs text-bone/50">{t.verify}</p>

@@ -18,13 +18,19 @@ import Analytics from "@/components/Analytics";
 import Newsletter from "@/components/Newsletter";
 import Smooth from "@/components/Smooth";
 import ScrollProgress from "@/components/ScrollProgress";
+
+const TITLE = "Motors USA | Buy & Sell Luxury Cars, Supercars & Hypercars";
+const DESC = "Buy and sell luxury cars, supercars and hypercars. Inspected, documented Ferrari, Lamborghini, Porsche and McLaren with verified specs and a secure process.";
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: { default: "Motors USA | Curated Performance & Collector Cars", template: "%s | Motors USA" },
-  description: "Buy, sell and compare curated supercars, hypercars and collector vehicles at Motors USA. Verified specs, honest history, clear process.",
-  applicationName: "Motors USA", alternates: { canonical: "/" },
-  openGraph: { type: "website", siteName: "Motors USA", url: "/", title: "Motors USA | Curated Performance & Collector Cars", description: "Buy, sell and compare curated supercars, hypercars and collector vehicles." },
-  twitter: { card: "summary_large_image", title: "Motors USA", description: "Curated performance and collector cars." },
+  title: { default: TITLE, template: "%s | Motors USA" },
+  description: DESC,
+  applicationName: "Motors USA",
+  keywords: ["buy luxury cars", "sell luxury cars", "supercars for sale", "hypercars", "Ferrari", "Lamborghini", "Porsche", "McLaren", "collector cars", "Motors USA"],
+  alternates: { canonical: "/" },
+  openGraph: { type: "website", siteName: "Motors USA", url: "/", title: TITLE, description: DESC, locale: "en_US", alternateLocale: ["fa_IR"] },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESC },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
 };
 export const viewport: Viewport = { themeColor: "#121110", width: "device-width", initialScale: 1 };

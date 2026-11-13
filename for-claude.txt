@@ -1,0 +1,235 @@
+=== components/Prefs.tsx ===
+"use client";
+import { createContext, useContext, useEffect, useState } from "react";
+export type Lang = "en" | "fa"; export type Theme = "dark" | "light";
+type OV = { year: string; make: string; model: string; body: string; engine: string; hp: string; transmission: string; accel: string | null; top: string | null };
+const en = {
+  menu: "MENU", close: "CLOSE", search: "SEARCH", cars: "Cars", brands: "Brands", compare: "Compare", sell: "Sell", sold: "Sold", contact: "Contact", journal: "Journal", about2: "About us", privacy: "Privacy", terms: "Terms",
+  viewMore: "VIEW MORE →", shop: "Shop", media: "Media", newsNav: "News", videoTitle: "VIDEO", more: "More", latest: "LATEST NEWS", readArticle: "READ ARTICLE →", viewAll: "VIEW ALL →", newsBadge: "CAR NEWS", errTitle: "Something went wrong", errText: "The page could not be shown. Please try again.", retry: "TRY AGAIN", goHome: "HOME", nfTitle: "Page not found", nfText: "This page does not exist or has moved.", heroCollection: "THE COLLECTION", availSub: (n: number) => `${n} cars ready for delivery`, soldSub: (n: number) => `${n} cars sold, with history`, cmpSub: "Compare up to 4 cars side by side", brandsSub: (n: number) => `${n} world-class brands`, sellSub: "Get your car valued and listed", heroBrand: "PORSCHE", searchPh: "Search any car: Porsche, 918, Ferrari…", noRes: "No cars found",
+  about: "CURATED PERFORMANCE CARS", aboutP1: "Motors USA is a curated showroom for supercars, hypercars and collector vehicles. Every car is inspected, documented and presented with honest specs.", aboutP2: "Buy direct, sell your car, or place it on consignment, with a clear, tracked process from first enquiry to handover.",
+  sold2: "CARS SOLD", stock: "IN STOCK", est: "ESTABLISHED", finest: "THE WORLD'S FINEST BRANDS", featured: "FEATURED STOCK",
+  news: "Stay Ahead of the Curve", newsText: "Stay up to date with the latest trends in luxury automobiles, exclusive brand features and insider news from the world of high-end vehicles.", email: "Enter your email",
+  available: "Available Cars", soldCars: "Sold Cars", all: "All", noMatch: "No cars match these filters.", featuredBadge: "Featured", save: "Save", soldBadge: "SOLD", mi: "mi",
+  rights: "© 2026 MOTORS USA. ALL RIGHTS RESERVED.", visit: "VISIT", discover: "DISCOVER", company: "COMPANY", footAbout: "Curated inventory of automotive excellence.",
+  brandsTitle: "BRANDS", carsCount: "cars", noBrandCars: "No cars from this brand right now.", backBrands: "← Brands", titleAvail: "AVAILABLE CARS", titleSold: "SOLD CARS",
+  home: "HOME", collection: "COLLECTION", price: "PRICE", availableTxt: "Available", hp: "HP", acc: "0–100 KM/H", top: "TOP SPEED KM/H", year: "YEAR", inquiry: "INQUIRY", whatsapp: "WHATSAPP", call: "CALL", articleBadge: "ARTICLE", maybe: "MAYBE YOU WILL LIKE IT",
+  condHistory: "Condition & history", condText: "Demo text: describe the exact car here: colour and trim, options, service history, ownership, documents, warranty and any modifications.", tech: "Technical details", verify: "Specifications and availability must be verified before purchase.",
+  lDisp: "Displacement", lBattery: "Battery capacity", lSeats: "Seats", lDrive: "Drivetrain", lIce: "Petrol engine power", lMotors: "Electric motors", lMileage: "Mileage", lEngine: "Engine", lTrans: "Transmission", lFuel: "Fuel", lBody: "Body",
+  overview: (o: OV) => `The ${o.year} ${o.make} ${o.model} is a ${o.body.toLowerCase()} powered by a ${o.engine} producing ${o.hp} hp, paired with a ${o.transmission} transmission${o.accel ? ` and reaching 100 km/h in ${o.accel} seconds` : ""}${o.top ? `, with a top speed of ${o.top} km/h` : ""}.`,
+  cmpTitle: "COMPARE", carN: "Car", rPrice: "Price", rYear: "Year", rMileage: "Mileage", rPower: "Power", rEngine: "Engine", rTrans: "Transmission", rFuel: "Fuel", rAcc: "0–100 km/h", rTop: "Top speed",
+  sellTitle: "SELL MY CAR", step: "STEP", s1: "Vehicle details", s2: "Documents & photos", s3: "Contact", fMake: "Make", fModel: "Model", fYear: "Year", fMileage: "Mileage", fPrice: "Desired price (USD)", fName: "Full name", fPhone: "Phone",
+  upNote: "Photo and document upload will connect to cloud storage in the next version.", next: "NEXT", back: "BACK", submit: "SUBMIT", okMsg: "Thank you, we will contact you shortly.", failMsg: "Please check the form and try again.",
+  aboutTitle: "ABOUT", aboutText: "Motors USA is a curated showroom for performance and collector cars. Replace this text with your real story, team and numbers.", contactTitle: "CONTACT", phone: "Phone", emailL: "Email",
+  privacyTitle: "PRIVACY", privacyText: "Placeholder privacy policy: replace with a policy reviewed for your market before launch.", termsTitle: "TERMS", termsText: "Placeholder terms of use: replace before launch.", journalTitle: "JOURNAL",
+  terms2: {} as Record<string, string>,
+};
+export type Dict = typeof en;
+const fa: Dict = {
+  menu: "منو", close: "بستن", search: "جستجو", cars: "خودروها", brands: "برندها", compare: "مقایسه", sell: "فروش", sold: "فروخته‌شده", contact: "تماس", journal: "مجله", about2: "درباره ما", privacy: "حریم خصوصی", terms: "شرایط استفاده",
+  viewMore: "مشاهده بیشتر ←", shop: "فروشگاه", media: "رسانه", newsNav: "اخبار", videoTitle: "ویدیو", more: "بیشتر", latest: "آخرین اخبار", readArticle: "خواندن مقاله ←", viewAll: "مشاهده همه ←", newsBadge: "اخبار خودرو", errTitle: "مشکلی پیش آمد", errText: "صفحه نمایش داده نشد. لطفاً دوباره تلاش کنید.", retry: "تلاش دوباره", goHome: "خانه", nfTitle: "صفحه پیدا نشد", nfText: "این صفحه وجود ندارد یا جابه‌جا شده است.", heroCollection: "مجموعه خودروها", availSub: (n: number) => `${n} خودروی آماده تحویل`, soldSub: (n: number) => `${n} خودروی فروخته‌شده با سابقه`, cmpSub: "مقایسه تا ۴ خودرو در کنار هم", brandsSub: (n: number) => `${n} برند معتبر جهان`, sellSub: "خودروی خود را ارزیابی و ثبت کنید", heroBrand: "PORSCHE", searchPh: "جستجوی هر خودرو: پورشه، ۹۱۸، فراری…", noRes: "خودرویی پیدا نشد",
+  about: "خودروهای منتخب و پرقدرت", aboutP1: "موتورز یو‌اس‌ای یک نمایشگاه منتخب برای سوپراسپورت، هایپرکار و خودروهای کلکسیونی است. هر خودرو بازرسی و مستند می‌شود و با مشخصات واقعی ارائه می‌شود.", aboutP2: "مستقیم بخرید، خودروی خود را بفروشید یا به‌صورت امانی بسپارید؛ با روندی روشن و قابل پیگیری از اولین درخواست تا تحویل.",
+  sold2: "خودروی فروخته‌شده", stock: "موجود در نمایشگاه", est: "سال تأسیس", finest: "بهترین برندهای جهان", featured: "خودروهای ویژه",
+  news: "همیشه یک قدم جلوتر", newsText: "از آخرین روندهای خودروهای لوکس، ویژگی‌های انحصاری برندها و اخبار دنیای خودروهای گران‌قیمت باخبر بمانید.", email: "ایمیل خود را وارد کنید",
+  available: "خودروهای موجود", soldCars: "خودروهای فروخته‌شده", all: "همه", noMatch: "خودرویی با این فیلتر پیدا نشد.", featuredBadge: "ویژه", save: "ذخیره", soldBadge: "فروخته شد", mi: "مایل",
+  rights: "© ۲۰۲۶ موتورز یو‌اس‌ای. تمامی حقوق محفوظ است.", visit: "نمایشگاه", discover: "کشف کنید", company: "شرکت", footAbout: "مجموعه‌ای منتخب از برترین خودروها.",
+  brandsTitle: "برندها", carsCount: "خودرو", noBrandCars: "فعلاً خودرویی از این برند موجود نیست.", backBrands: "→ برندها", titleAvail: "خودروهای موجود", titleSold: "خودروهای فروخته‌شده",
+  home: "خانه", collection: "مجموعه", price: "قیمت", availableTxt: "موجود", hp: "اسب بخار", acc: "۰ تا ۱۰۰ کیلومتر", top: "حداکثر سرعت (کیلومتر بر ساعت)", year: "سال ساخت", inquiry: "درخواست اطلاعات", whatsapp: "واتس‌اپ", call: "تماس", articleBadge: "مقاله", maybe: "شاید خوشتان بیاید",
+  condHistory: "وضعیت و سابقه", condText: "متن نمونه: اینجا مشخصات دقیق همین خودرو را بنویسید: رنگ و تریم، آپشن‌ها، سابقه سرویس، مالکیت، مدارک، گارانتی و هرگونه تغییرات.", tech: "مشخصات فنی", verify: "مشخصات و موجودی قبل از خرید باید تأیید شود.",
+  lDisp: "حجم موتور", lBattery: "ظرفیت باتری", lSeats: "تعداد سرنشین", lDrive: "سیستم انتقال قدرت", lIce: "قدرت موتور بنزینی", lMotors: "موتورهای الکتریکی", lMileage: "کارکرد", lEngine: "موتور", lTrans: "گیربکس", lFuel: "سوخت", lBody: "نوع بدنه",
+  overview: (o: OV) => `${o.make} ${o.model} مدل ${o.year} یک خودروی ${o.body} با موتور ${o.engine} و قدرت ${o.hp} اسب بخار است که با گیربکس ${o.transmission} ارائه می‌شود${o.accel ? `، در ${o.accel} ثانیه به ۱۰۰ کیلومتر بر ساعت می‌رسد` : ""}${o.top ? ` و حداکثر سرعت آن ${o.top} کیلومتر بر ساعت است` : ""}.`,
+  cmpTitle: "مقایسه", carN: "خودرو", rPrice: "قیمت", rYear: "سال", rMileage: "کارکرد", rPower: "قدرت", rEngine: "موتور", rTrans: "گیربکس", rFuel: "سوخت", rAcc: "۰ تا ۱۰۰ کیلومتر", rTop: "حداکثر سرعت",
+  sellTitle: "فروش خودرو", step: "مرحله", s1: "مشخصات خودرو", s2: "مدارک و عکس‌ها", s3: "اطلاعات تماس", fMake: "برند", fModel: "مدل", fYear: "سال ساخت", fMileage: "کارکرد", fPrice: "قیمت مدنظر (دلار)", fName: "نام و نام خانوادگی", fPhone: "تلفن",
+  upNote: "آپلود عکس و مدارک در نسخه بعدی به فضای ابری وصل می‌شود.", next: "بعدی", back: "قبلی", submit: "ثبت", okMsg: "سپاسگزاریم، به‌زودی با شما تماس می‌گیریم.", failMsg: "لطفاً فرم را بررسی کنید و دوباره تلاش کنید.",
+  aboutTitle: "درباره ما", aboutText: "موتورز یو‌اس‌ای یک نمایشگاه منتخب برای خودروهای پرقدرت و کلکسیونی است. این متن را با داستان، تیم و اعداد واقعی خود جایگزین کنید.", contactTitle: "تماس با ما", phone: "تلفن", emailL: "ایمیل",
+  privacyTitle: "حریم خصوصی", privacyText: "متن نمونه: پیش از راه‌اندازی، آن را با سیاست‌نامه‌ای متناسب با بازار خود جایگزین کنید.", termsTitle: "شرایط استفاده", termsText: "متن نمونه: پیش از راه‌اندازی جایگزین شود.", journalTitle: "مجله",
+  terms2: { Coupe: "کوپه", Roadster: "رودستر", SUV: "شاسی‌بلند", Convertible: "کروک", Sedan: "سدان", Gasoline: "بنزین", Hybrid: "هیبریدی", Automatic: "اتوماتیک", Manual: "دستی", Italy: "ایتالیا", Germany: "آلمان", "United Kingdom": "بریتانیا", Sweden: "سوئد", France: "فرانسه", USA: "آمریکا" },
+};
+const dict = { en, fa };
+type C = { lang: Lang; theme: Theme; t: Dict; setLang: (l: Lang) => void; setTheme: (t: Theme) => void; nf: (n: number) => string; money: (n: number) => string; bn: (make: string) => string; tr: (s: string) => string };
+const Ctx = createContext<C>(null!);
+export const usePrefs = () => useContext(Ctx);
+export default function Prefs({ children }: { children: React.ReactNode }) {
+  const [lang, setLang] = useState<Lang>("en"); const [theme, setTheme] = useState<Theme>("dark");
+  useEffect(() => { const l = localStorage.getItem("lang") as Lang | null, t = localStorage.getItem("theme") as Theme | null; if (l) setLang(l); if (t) setTheme(t); }, []);
+  useEffect(() => { const h = document.documentElement; h.lang = lang; h.dir = lang === "fa" ? "rtl" : "ltr"; h.classList.toggle("light", theme === "light"); localStorage.setItem("lang", lang); localStorage.setItem("theme", theme); }, [lang, theme]);
+  const loc = lang === "fa" ? "fa-IR" : "en-US"; const t = dict[lang];
+  const value: C = {
+    lang, theme, t, setLang, setTheme, nf: n => n.toLocaleString(loc), money: n => new Intl.NumberFormat(loc, { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n),
+    bn: make => make, tr: s => (lang === "fa" ? t.terms2[s] ?? s : s),
+  };
+  return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
+}
+=== components/VehicleView.tsx ===
+"use client";
+import Link from "next/link";
+import Image from "./SafeImage";
+import Gallery from "./Gallery";
+import CarVideo from "./CarVideo";
+import { usePrefs } from "./Prefs";
+import { Vehicle } from "@/data/vehicles";
+import { Article } from "@/data/articles";
+import { brandSlug } from "@/data/brands-util";
+import { site } from "@/data/site";
+export default function VehicleView({ v, same, art }: { v: Vehicle; same: Vehicle[]; art: Article }) {
+  const { t, lang, nf, money, bn, tr } = usePrefs();
+  const plain = (n: number) => nf(n).replace(/[,٬]/g, "");
+  const name = `${bn(v.make)} ${v.model} ${plain(v.year)}`;
+  const stats: [string, string][] = [[nf(v.hp), t.hp], [v.accel ? nf(v.accel) + (lang === "fa" ? " ثانیه" : "s") : "—", t.acc], [v.top ? nf(v.top) : "—", t.top], [plain(v.year), t.year]];
+  const more: [string, string][] = [[t.lMileage, `${nf(v.mileage)} ${t.mi}`], [t.lEngine, v.engine], [t.lTrans, tr(v.transmission)], [t.lFuel, tr(v.fuel)], [t.lBody, tr(v.body)], ...(v.cc ? [[t.lDisp, `${nf(v.cc)} cc`] as [string, string]] : []), ...(v.iceHp ? [[t.lIce, v.iceHp] as [string, string]] : []), ...(v.motors ? [[t.lMotors, nf(v.motors)] as [string, string]] : []), ...(v.battery ? [[t.lBattery, v.battery] as [string, string]] : []), ...(v.drive ? [[t.lDrive, v.drive] as [string, string]] : []), ...(v.seats ? [[t.lSeats, nf(v.seats)] as [string, string]] : [])];
+  const btn = "rounded-full border border-bone/30 py-3";
+  return (
+    <div className="mx-auto max-w-7xl px-6 py-10 md:px-12">
+      <nav className="font-mono text-xs tracking-widest text-bone/60"><Link href="/">{t.home}</Link> — <Link href="/inventory">{t.collection}</Link> — <Link href={`/brands/${brandSlug(v.make)}`}><bdi dir="ltr">{bn(v.make)}</bdi></Link></nav>
+      <h1 className="mt-4 font-heading text-3xl font-bold md:text-5xl"><bdi dir="ltr">{bn(v.make)} {v.model}</bdi> {plain(v.year)}</h1>
+      {v.tagline && <p className="mt-2 text-lg text-bone/70">{v.tagline[lang]}</p>}
+      <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_380px]">
+        <div>
+          <Gallery images={v.gallery} alt={name} />
+          {v.video && <section className="mt-10"><h2 className="mb-4 font-heading text-2xl font-bold">{t.videoTitle}</h2><CarVideo src={v.video} title={name} label="Sound" /></section>}
+          <article className="mt-10 rounded-xl bg-card p-6 md:p-10">
+            <h2 className="font-heading text-2xl font-bold"><bdi dir="ltr">{bn(v.make)} {v.model}</bdi></h2>
+            <p className="mt-4 text-bone/80">{t.overview({ year: plain(v.year), make: bn(v.make), model: v.model, body: tr(v.body), engine: v.engine, hp: nf(v.hp), transmission: tr(v.transmission), accel: v.accel ? nf(v.accel) : null, top: v.top ? nf(v.top) : null })}</p>
+            <h3 className="mt-8 font-heading text-xl font-bold">{t.condHistory}</h3><p className="mt-3 text-bone/80">{t.condText}</p>
+            <h3 className="mt-8 font-heading text-xl font-bold">{t.tech}</h3>
+            <dl className="mt-3 grid grid-cols-2 gap-px overflow-hidden rounded-lg bg-bone/10">{more.map(([k, val]) => <div key={k} className="bg-coal p-4"><dt className="font-mono text-xs tracking-widest text-bone/60">{k}</dt><dd className="mt-1">{val}</dd></div>)}</dl>
+            <p className="mt-6 text-xs text-bone/50">{t.verify}</p>
+          </article>
+        </div>
+        <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
+          <div className="rounded-xl bg-card p-6">
+            <p className="font-mono text-xs tracking-widest text-bone/60">{t.price}</p><p className="mt-1 font-mono text-3xl font-bold">{money(v.price)}</p><p className="text-sm text-bone/60">{v.status === "sold" ? t.soldBadge : t.availableTxt}</p>
+            <div className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-lg bg-bone/10">{stats.map(([n, l]) => <div key={l} className="bg-coal p-4 text-center"><p className="font-mono text-2xl font-bold">{n}</p><p className="text-xs tracking-widest text-bone/60">{l}</p></div>)}</div>
+            <div className="mt-6 grid grid-cols-2 gap-3 text-center text-sm font-bold tracking-widest">
+              <Link href="/compare" data-track="compare" data-slug={v.slug} className={btn}>{t.compare}</Link>
+              <Link href="/contact" data-track="inquiry" data-slug={v.slug} className={btn}>{t.inquiry}</Link>
+              <a href={`https://wa.me/?text=${encodeURIComponent(name)}`} data-track="whatsapp" data-slug={v.slug} className={btn}>{t.whatsapp}</a>
+              <a href={`tel:${site.phone}`} data-track="call" data-slug={v.slug} className="rounded-full bg-flag py-3 text-white">{t.call}</a></div>
+          </div>
+          <Link href={`/journal/${art.slug}`} className="group block overflow-hidden rounded-xl bg-card">
+            <div className="relative aspect-video"><Image src={art.image} alt="" fill sizes="380px" className="object-cover transition duration-700 group-hover:scale-105" /><span className="absolute start-3 top-3 bg-black px-2 py-1 text-xs text-white">{t.articleBadge}</span></div>
+            <div className="p-5"><p className="font-mono text-xs text-bone/60">{art.date}</p><h3 className="mt-1 font-heading text-xl font-bold">{lang === "fa" ? art.titleFa : art.title}</h3><p className="mt-2 text-sm text-bone/70">{lang === "fa" ? art.excerptFa : art.excerpt}</p></div>
+          </Link>
+        </aside>
+      </div>
+      {same.length > 0 && <section className="mt-16 border-t border-bone/10 pt-10"><h2 className="font-heading text-2xl font-bold md:text-4xl">{t.maybe}</h2>
+        <div className="mt-6 divide-y divide-bone/10">{same.map(s => <Link key={s.slug} href={`/inventory/${s.slug}`} className="flex items-center gap-5 py-4 hover:text-flag"><span className="relative h-16 w-24 shrink-0 overflow-hidden rounded"><Image src={s.image} alt="" fill sizes="96px" className="object-cover" /></span><span className="flex-1 text-lg font-semibold"><bdi dir="ltr">{bn(s.make)} {s.model}</bdi> <span className="text-bone/60">{plain(s.year)}</span></span><span className="font-mono">{money(s.price)} →</span></Link>)}</div></section>}
+    </div>
+  );
+}
+=== data/vehicles.ts ===
+// DEMO DATA: prices/mileage are placeholders. Power, 0-100 and top speed are public manufacturer figures; verify before publishing.
+export type Vehicle = { slug:string; make:string; model:string; year:number; price:number; mileage:number; body:string; fuel:string; transmission:string; hp:number; engine:string; accel:number|null; top:number|null; status:"available"|"sold"; featured:boolean; tagline?:{en:string;fa:string}; cc?:number; battery?:string; seats?:number; drive?:string; iceHp?:string; motors?:number; image:string; gallery:string[]; video?:string };
+type R = [string,string,number,number,number,string,string,string,number,string,number|null,number|null,"available"|"sold",string];
+const rows: R[] = [
+ ["Porsche","918 Spyder",2015,1850000,4200,"Roadster","Hybrid","PDK",887,"4.6L V8 + 2 e-motors",2.6,345,"available","hero-poster.webp"],
+ ["Ferrari","SF90 Stradale",2022,625000,3100,"Coupe","Hybrid","8-speed DCT",986,"4.0L V8 twin-turbo + 3 e-motors",2.5,340,"available","ferrari-sf90-stradale-2022.webp"],
+ ["Ferrari","Purosangue",2023,520000,1200,"SUV","Gasoline","DCT",715,"6.5L V12",3.3,310,"available","ferrari-purosangue.webp"],
+ ["Ferrari","488 Pista Spider",2019,480000,5200,"Convertible","Gasoline","DCT",710,"3.9L V8 twin-turbo",2.85,340,"available","ferrari-488-pista-spider.webp"],
+ ["Ferrari","812 GTS",2021,560000,3100,"Convertible","Gasoline","DCT",789,"6.5L V12",3.0,340,"available","ferrari-812-gts.webp"],
+ ["Lamborghini","Revuelto",2024,780000,900,"Coupe","Hybrid","DCT",1001,"6.5L V12 + 3 e-motors",2.5,350,"available","lamborghini-revuelto1.webp"],
+ ["Lamborghini","Aventador SVJ",2019,690000,2800,"Coupe","Gasoline","ISR",759,"6.5L V12",2.8,350,"available","lamborghini-aventador-svj.webp"],
+ ["Lamborghini","Veneno",2014,9500000,1500,"Coupe","Gasoline","ISR",740,"6.5L V12",2.9,355,"available","lamborghini-veneno.webp"],
+ ["McLaren","Senna",2019,950000,1900,"Coupe","Gasoline","DCT",789,"4.0L V8 twin-turbo",2.8,340,"available","mclaren-senna.webp"],
+ ["McLaren","Speedtail",2020,2400000,800,"Coupe","Hybrid","DCT",1055,"4.0L V8 twin-turbo + e-motor",null,403,"available","mclaren-speedtail.webp"],
+ ["McLaren","P1 GTR",2015,3200000,600,"Coupe","Hybrid","DCT",986,"3.8L V8 twin-turbo + e-motor",null,null,"available","mclaren-p1-gtr.webp"],
+ ["Mercedes-Benz","AMG ONE",2023,3100000,400,"Coupe","Hybrid","AMT",1063,"1.6L V6 turbo + 4 e-motors",2.9,352,"available","mercedes-benz-amg-one.webp"],
+ ["Koenigsegg","Jesko Attack",2022,3700000,300,"Coupe","Gasoline","LST",1280,"5.0L V8 twin-turbo",null,null,"available","koenigsegg-jesko-attack.webp"],
+ ["Rolls-Royce","Phantom Series",2022,520000,2000,"Sedan","Gasoline","Automatic",563,"6.75L V12 twin-turbo",5.3,250,"available","rolls-royce-phantom-series.webp"],
+ ["Lamborghini","Aventador",2017,390000,12000,"Coupe","Gasoline","ISR",691,"6.5L V12",2.9,350,"sold","lamborghini-aventador.webp"],
+ ["Porsche","Carrera GT",2006,1450000,9800,"Roadster","Gasoline","Manual",603,"5.7L V10",3.5,330,"sold","car-3.webp"],
+];
+// Which video belongs to which car (files live in frontend/public/video). Change freely.
+const VIDEOS: Record<string, string> = { "ferrari-sf90-stradale-2022": "/video/ferari.mp4", "ferrari-488-pista-spider-2019": "/video/ferari-green.mp4", "ferrari-812-gts-2021": "/video/ferari1.mp4", "lamborghini-revuelto-2024": "/video/lumborgini.mp4", "rolls-royce-phantom-series-2022": "/video/collection-roys-ferari.mp4" };
+export const mediaVideos: { file: string; title: string }[] = [{ file: "ferari.mp4", title: "Ferrari" }, { file: "ferari-green.mp4", title: "Ferrari 488 Pista Spider" }, { file: "ferari1.mp4", title: "Ferrari 812 GTS" }, { file: "lumborgini.mp4", title: "Lamborghini" }, { file: "collection-roys-ferari.mp4", title: "Rolls-Royce & Ferrari" }, { file: "Audi-RS7.mp4", title: "Audi RS7" }, { file: "bmw.mp4", title: "BMW" }, { file: "bmw1.mp4", title: "BMW" }];
+const FEATURED = new Set(["porsche-918-spyder-2015","lamborghini-revuelto-2024","mclaren-speedtail-2020","mercedes-benz-amg-one-2023","ferrari-purosangue-2023","ferrari-sf90-stradale-2022"]);
+export const vehicles: Vehicle[] = rows.map(r => ({ slug:`${r[0]}-${r[1]}-${r[2]}`.toLowerCase().replace(/[^a-z0-9]+/g,"-"), make:r[0],model:r[1],year:r[2],price:r[3],mileage:r[4],body:r[5],fuel:r[6],transmission:r[7],hp:r[8],engine:r[9],accel:r[10],top:r[11],status:r[12],featured:FEATURED.has(`${r[0]}-${r[1]}-${r[2]}`.toLowerCase().replace(/[^a-z0-9]+/g,"-")),image:`/cars/${r[13]}`, gallery:[`/cars/${r[13]}`], ...(r[1]==="SF90 Stradale"?{tagline:{en:"Plug-in Hybrid Supercar",fa:"سوپرکار هیبریدی پلاگین"},cc:3990,battery:"7.9 kWh",seats:2,drive:"AWD",iceHp:"780 CV",motors:3}:{}), ...(r[1]==="Revuelto"?{gallery:["/cars/lamborghini-revuelto1.webp","/cars/lumborghini1.webp","/cars/lumborghini2.webp"]}:{}), ...(r[1]==="918 Spyder"?{gallery:["/cars/hero-poster.webp","/cars/car-2.webp"]}:{}), ...(VIDEOS[`${r[0]}-${r[1]}-${r[2]}`.toLowerCase().replace(/[^a-z0-9]+/g,"-")] ? { video: VIDEOS[`${r[0]}-${r[1]}-${r[2]}`.toLowerCase().replace(/[^a-z0-9]+/g,"-")] } : {}) }));
+export const usd = (n:number)=>new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0}).format(n);
+export const makes = [...new Set(vehicles.map(v=>v.make))];
+=== components/Header.tsx ===
+"use client";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { usePrefs } from "./Prefs";
+import CarSearch from "./CarSearch";
+import { site } from "@/data/site";
+import { IranFlag, UKFlag } from "./Flags";
+export { default as Logo } from "./Logo";
+import Logo from "./Logo";
+export default function Header() {
+  const { t, lang, setLang, theme, setTheme } = usePrefs();
+  const [panel, setPanel] = useState<null | "menu" | "search">(null);
+  const links: [string, string][] = [[t.cars, "/inventory"], [t.shop, "/shop"], [t.media, "/media"], [t.newsNav, "/journal"], [t.about2, "/about"], [t.contact, "/contact"]];
+  const more: [string, string][] = [[t.brands, "/brands"], [t.compare, "/compare"], [t.sell, "/sell-your-car"], [t.sold, "/inventory?status=sold"]];
+  const btn = "flex h-11 items-center gap-2 px-1.5 text-sm font-bold tracking-widest transition hover:text-flag sm:h-12 sm:px-2";
+  const ic = { width: 24, height: 24, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+  const close = () => setPanel(null);
+  useEffect(() => { document.documentElement.style.overflow = panel ? "hidden" : ""; return () => { document.documentElement.style.overflow = ""; }; }, [panel]);
+  return (
+    <>
+      <header className="sticky top-0 z-50 flex items-center justify-between gap-2 bg-ink/95 px-3 py-2 sm:px-4 sm:py-3 md:px-12">
+        <div className="flex shrink-0"><button onClick={() => setPanel("menu")} aria-label={t.menu} className={btn}><span className="flex flex-col gap-[6px]"><i className="block h-[2.5px] w-8 bg-current" /><i className="block h-[2.5px] w-8 bg-current" /><i className="block h-[2.5px] w-5 bg-current" /></span><span className="hidden sm:inline">{t.menu}</span></button></div>
+        <Link href="/" aria-label="Motors USA" onClick={close} className="min-w-0"><Logo /></Link>
+        <div className="flex shrink-0 items-center justify-end gap-0.5 sm:gap-1 md:gap-3">
+          <div role="group" aria-label="Language" className="flex items-center gap-2">
+            {([["en", UKFlag, "English"], ["fa", IranFlag, "فارسی"]] as const).map(([code, F, name]) => (
+              <button key={code} onClick={() => setLang(code)} aria-label={name} aria-pressed={lang === code} className={`rounded-full transition duration-300 ${lang === code ? "scale-110 opacity-100 ring-2 ring-flag ring-offset-2 ring-offset-ink" : "opacity-50 hover:opacity-100"}`}><F size={26} /></button>))}
+          </div>
+          <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className={btn} aria-label="Theme">
+            {theme === "dark" ? <svg {...ic}><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></svg> : <svg {...ic}><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" /></svg>}</button>
+          <button onClick={() => setPanel("search")} className={btn} aria-label={t.search}><svg {...ic}><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg><span className="hidden sm:inline">{t.search}</span></button>
+        </div>
+      </header>
+      {panel && (
+        <div role="dialog" aria-modal className="fixed inset-0 z-[100] overflow-y-auto overscroll-contain bg-ink px-5 py-6 md:px-16">
+          <div className="flex items-center justify-between"><button onClick={close} className={btn}>✕ {t.close}</button><Logo /><span className="w-12" /></div>
+          {panel === "search" ? <div className="mx-auto mt-10 max-w-5xl"><CarSearch onPick={close} autoFocus /></div> : (
+            <div className="mx-auto mt-8 grid max-w-6xl gap-10 lg:grid-cols-[1fr_1fr]">
+              <nav>{links.map(([l, h], i) => <Link key={h} href={h} onClick={close} className="flex items-baseline gap-4 border-b border-bone/10 py-3 font-heading text-3xl font-bold uppercase transition-colors hover:text-flag md:text-5xl"><span className="font-mono text-sm text-flag">0{i + 1}</span>{l}</Link>)}</nav>
+              <div><CarSearch onPick={close} /><div className="mt-8 flex flex-wrap gap-2">{more.map(([l, h]) => <Link key={h} href={h} onClick={close} className="rounded-full bg-card px-4 py-2 text-sm font-semibold hover:text-flag">{l}</Link>)}</div><div className="mt-8 border-t border-bone/10 pt-6 text-bone/80"><p className="font-semibold">{site.address[lang]}</p><p dir="ltr" className="mt-1 font-mono">{site.phone}</p><p className="mt-1">{site.email}</p></div></div>
+            </div>)}
+        </div>
+      )}
+    </>
+  );
+}
+=== app/layout.tsx ===
+import "@fontsource/orbitron/700.css";
+import "@fontsource/orbitron/900.css";
+import "@fontsource/jetbrains-mono/400.css";
+import "@fontsource/jetbrains-mono/700.css";
+import "@fontsource/open-sans/400.css";
+import "@fontsource/open-sans/600.css";
+import "@fontsource/vazirmatn/400.css";
+import "@fontsource/vazirmatn/700.css";
+import "./globals.css";
+import type { Metadata, Viewport } from "next";
+import { site } from "@/data/site";
+import { jsonLd, orgLd } from "@/lib/seo";
+import Prefs from "@/components/Prefs";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import Floating from "@/components/Floating";
+import Analytics from "@/components/Analytics";
+import Newsletter from "@/components/Newsletter";
+import Smooth from "@/components/Smooth";
+import ScrollProgress from "@/components/ScrollProgress";
+export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
+  title: { default: "Motors USA | Curated Performance & Collector Cars", template: "%s | Motors USA" },
+  description: "Buy, sell and compare curated supercars, hypercars and collector vehicles at Motors USA. Verified specs, honest history, clear process.",
+  applicationName: "Motors USA", alternates: { canonical: "/" },
+  openGraph: { type: "website", siteName: "Motors USA", url: "/", title: "Motors USA | Curated Performance & Collector Cars", description: "Buy, sell and compare curated supercars, hypercars and collector vehicles." },
+  twitter: { card: "summary_large_image", title: "Motors USA", description: "Curated performance and collector cars." },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
+};
+export const viewport: Viewport = { themeColor: "#121110", width: "device-width", initialScale: 1 };
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (<html lang="en" dir="ltr" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(orgLd()) }} /></head><body suppressHydrationWarning><Prefs><Smooth><ScrollProgress /><Analytics /><Header /><main>{children}</main><Newsletter /><Footer /><Floating /></Smooth></Prefs></body></html>);
+}
+=== lib/seo.ts ===
+import { site } from "@/data/site";
+export const abs = (path = "/") => new URL(path, site.url).toString();
+// Safe JSON-LD string (escapes "<" so it cannot break out of the script tag).
+export const jsonLd = (o: unknown) => JSON.stringify(o).replace(/</g, "\\u003c");
+export const orgLd = () => ({ "@context": "https://schema.org", "@type": "AutoDealer", name: site.name, url: site.url, image: abs("/opengraph-image"), telephone: site.phoneIntl, email: site.email, address: { "@type": "PostalAddress", streetAddress: site.address.en, addressCountry: "IR" }, sameAs: Object.values(site.socials).filter(u => u.startsWith("http") && u.length > 25) });
+export const crumbs = (items: [string, string][]) => ({ "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: items.map(([name, path], i) => ({ "@type": "ListItem", position: i + 1, name, item: abs(path) })) });

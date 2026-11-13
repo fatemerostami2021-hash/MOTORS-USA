@@ -12,18 +12,24 @@ export default function Header() {
   const [panel, setPanel] = useState<null | "menu" | "search">(null);
   const links: [string, string][] = [[t.cars, "/inventory"], [t.shop, "/shop"], [t.media, "/media"], [t.newsNav, "/journal"], [t.about2, "/about"], [t.contact, "/contact"]];
   const more: [string, string][] = [[t.brands, "/brands"], [t.compare, "/compare"], [t.sell, "/sell-your-car"], [t.sold, "/inventory?status=sold"]];
-  const btn = "flex h-11 items-center gap-2 px-1.5 text-sm font-bold tracking-widest transition hover:text-flag sm:h-12 sm:px-2";
-  const ic = { width: 24, height: 24, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+  const btn = "flex h-10 items-center gap-2 px-1 text-sm font-bold tracking-widest transition hover:text-flag sm:h-12 sm:px-2";
+  const ic = { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, className: "h-5 w-5 sm:h-6 sm:w-6" };
   const close = () => setPanel(null);
   useEffect(() => { document.documentElement.style.overflow = panel ? "hidden" : ""; return () => { document.documentElement.style.overflow = ""; }; }, [panel]);
+  const langs = [["en", UKFlag, "English"], ["fa", IranFlag, "فارسی"]] as const;
+  const other = langs.find(l => l[0] !== lang)!;
+  const OtherFlag = other[1];
   return (
     <>
-      <header className="sticky top-0 z-50 flex items-center justify-between gap-2 bg-ink/95 px-3 py-2 sm:px-4 sm:py-3 md:px-12">
-        <div className="flex shrink-0"><button onClick={() => setPanel("menu")} aria-label={t.menu} className={btn}><span className="flex flex-col gap-[6px]"><i className="block h-[2.5px] w-8 bg-current" /><i className="block h-[2.5px] w-8 bg-current" /><i className="block h-[2.5px] w-5 bg-current" /></span><span className="hidden sm:inline">{t.menu}</span></button></div>
-        <Link href="/" aria-label="Motors USA" onClick={close} className="min-w-0"><Logo /></Link>
-        <div className="flex shrink-0 items-center justify-end gap-0.5 sm:gap-1 md:gap-3">
-          <div role="group" aria-label="Language" className="flex items-center gap-2">
-            {([["en", UKFlag, "English"], ["fa", IranFlag, "فارسی"]] as const).map(([code, F, name]) => (
+      <header className="sticky top-0 z-50 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-1 bg-ink/95 px-3 py-2 sm:px-4 sm:py-3 md:px-12">
+        <div className="flex justify-start"><button onClick={() => setPanel("menu")} aria-label={t.menu} className={btn}><span className="flex flex-col gap-[5px] sm:gap-[6px]"><i className="block h-[2.5px] w-6 bg-current sm:w-8" /><i className="block h-[2.5px] w-6 bg-current sm:w-8" /><i className="block h-[2.5px] w-4 bg-current sm:w-5" /></span><span className="hidden sm:inline">{t.menu}</span></button></div>
+        <Link href="/" aria-label="Motors USA" onClick={close} className="justify-self-center"><Logo /></Link>
+        <div className="flex items-center justify-end gap-0.5 sm:gap-1 md:gap-3">
+          {/* Mobile: one small flag that switches to the other language */}
+          <button onClick={() => setLang(other[0])} aria-label={other[2]} className="grid h-10 w-8 place-items-center sm:hidden"><OtherFlag size={20} /></button>
+          {/* Desktop / tablet: both flags */}
+          <div role="group" aria-label="Language" className="hidden items-center gap-2 sm:flex">
+            {langs.map(([code, F, name]) => (
               <button key={code} onClick={() => setLang(code)} aria-label={name} aria-pressed={lang === code} className={`rounded-full transition duration-300 ${lang === code ? "scale-110 opacity-100 ring-2 ring-flag ring-offset-2 ring-offset-ink" : "opacity-50 hover:opacity-100"}`}><F size={26} /></button>))}
           </div>
           <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className={btn} aria-label="Theme">
