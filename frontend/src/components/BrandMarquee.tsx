@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import { brandUrl } from "@/data/brand-links";
 import { brands } from "@/data/brands";
 import BrandIcon from "./BrandIcon";
 import { usePrefs } from "./Prefs";
@@ -13,10 +13,10 @@ export default function BrandMarquee() {
       <p dir="auto" className="mb-8 text-center font-mono text-sm tracking-[0.3em] text-bone/60">{t.finest}</p>
       <div className="flex w-max animate-[marquee_45s_linear_infinite] hover:[animation-play-state:paused] focus-within:[animation-play-state:paused]">
         {items.map((b, i) => (
-          <Link key={i} href={`/brands/${b.slug}`} className="mx-6 flex w-40 shrink-0 flex-col items-center gap-3 transition hover:scale-110 md:mx-10 md:w-48">
+          <a key={i} href={brandUrl(b.slug)} target="_blank" rel="noopener noreferrer" aria-label={`${b.name} - official website`} className="mx-6 flex w-40 shrink-0 flex-col items-center gap-3 transition hover:scale-110 md:mx-10 md:w-48">
             <BrandIcon slug={b.slug} name={b.name} size={88} />
             <span className="font-display text-xs font-bold tracking-widest">{b.name.toUpperCase()}</span>
-          </Link>
+          </a>
         ))}
       </div>
     </section>

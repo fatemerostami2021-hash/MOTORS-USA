@@ -1,5 +1,5 @@
 // DEMO DATA: prices/mileage are placeholders. Power, 0-100 and top speed are public manufacturer figures; verify before publishing.
-export type Vehicle = { slug:string; make:string; model:string; year:number; price:number; mileage:number; body:string; fuel:string; transmission:string; hp:number; engine:string; accel:number|null; top:number|null; status:"available"|"sold"; featured:boolean; tagline?:{en:string;fa:string}; cc?:number; battery?:string; seats?:number; drive?:string; iceHp?:string; motors?:number; image:string; gallery:string[]; video?:string };
+export type Vehicle = { slug:string; make:string; model:string; year:number; price:number; mileage:number; body:string; fuel:string; transmission:string; hp:number; engine:string; accel:number|null; top:number|null; status:"available"|"sold"; featured:boolean; tagline?:{en:string;fa:string}; notes?:{en:string;fa:string}; cc?:number; battery?:string; seats?:number; drive?:string; iceHp?:string; motors?:number; image:string; gallery:string[]; video?:string };
 type R = [string,string,number,number,number,string,string,string,number,string,number|null,number|null,"available"|"sold",string];
 const rows: R[] = [
  ["Porsche","918 Spyder",2015,1850000,4200,"Roadster","Hybrid","PDK",887,"4.6L V8 + 2 e-motors",2.6,345,"available","hero-poster.webp"],

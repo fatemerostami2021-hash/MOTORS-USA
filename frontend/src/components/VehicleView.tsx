@@ -13,9 +13,9 @@ export default function VehicleView({ v, same, art }: { v: Vehicle; same: Vehicl
   const { t, lang, nf, money, bn, tr } = usePrefs();
   const plain = (n: number) => nf(n).replace(/[,٬]/g, "");
   const name = `${bn(v.make)} ${v.model} ${plain(v.year)}`;
-  const story = stories[v.slug];
   const stats: [string, string][] = [[nf(v.hp), t.hp], [v.accel ? nf(v.accel) + (lang === "fa" ? " ثانیه" : "s") : "—", t.acc], [v.top ? nf(v.top) : "—", t.top], [plain(v.year), t.year]];
   const more: [string, string][] = [[t.lMileage, `${nf(v.mileage)} ${t.mi}`], [t.lEngine, v.engine], [t.lTrans, tr(v.transmission)], [t.lFuel, tr(v.fuel)], [t.lBody, tr(v.body)], ...(v.cc ? [[t.lDisp, `${nf(v.cc)} cc`] as [string, string]] : []), ...(v.iceHp ? [[t.lIce, v.iceHp] as [string, string]] : []), ...(v.motors ? [[t.lMotors, nf(v.motors)] as [string, string]] : []), ...(v.battery ? [[t.lBattery, v.battery] as [string, string]] : []), ...(v.drive ? [[t.lDrive, v.drive] as [string, string]] : []), ...(v.seats ? [[t.lSeats, nf(v.seats)] as [string, string]] : [])];
+  const story = stories[v.slug];
   const btn = "rounded-full border border-bone/30 py-3";
   return (
     <div className="mx-auto max-w-7xl px-6 py-10 md:px-12">
@@ -32,6 +32,7 @@ export default function VehicleView({ v, same, art }: { v: Vehicle; same: Vehicl
             <h3 className="mt-8 font-heading text-xl font-bold">{t.condHistory}</h3>
             {story && <p className="mt-3 text-bone/80">{story[lang]}</p>}
             <p className="mt-3 text-bone/80">{handover[lang]}</p>
+            {v.notes && <p className="mt-3 text-bone/80">{v.notes[lang]}</p>}
             <h3 className="mt-8 font-heading text-xl font-bold">{t.tech}</h3>
             <dl className="mt-3 grid grid-cols-2 gap-px overflow-hidden rounded-lg bg-bone/10">{more.map(([k, val]) => <div key={k} className="bg-coal p-4"><dt className="font-mono text-xs tracking-widest text-bone/60">{k}</dt><dd className="mt-1">{val}</dd></div>)}</dl>
             <p className="mt-6 text-xs text-bone/50">{t.verify}</p>

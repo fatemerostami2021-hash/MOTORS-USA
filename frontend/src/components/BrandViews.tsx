@@ -1,4 +1,5 @@
 "use client";
+import { brandUrl } from "@/data/brand-links";
 import Link from "next/link";
 import Stagger from "./Stagger";
 import BrandIcon from "./BrandIcon";
@@ -11,7 +12,7 @@ export function BrandsView() {
   return (
     <div className="mx-auto max-w-6xl px-6 py-14 md:px-12"><h1 className="font-heading text-4xl font-bold md:text-6xl">{t.brandsTitle}</h1>
       <Stagger className="mt-10 grid grid-cols-2 gap-5 md:grid-cols-4">
-        {brands.map(b => (<Link key={b.slug} href={`/brands/${b.slug}`} className="flex flex-col items-center gap-4 rounded-xl bg-card p-8 transition hover:text-flag hover:ring-1 hover:ring-flag"><BrandIcon slug={b.slug} name={b.name} size={80} /><span dir="ltr" className="font-display text-xs font-bold tracking-widest">{b.name.toUpperCase()}</span><span className="text-sm text-bone/60">{nf(vehicles.filter(v => v.make === b.name).length)} {t.carsCount}</span></Link>))}
+        {brands.map(b => (<a key={b.slug} href={brandUrl(b.slug)} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-4 rounded-xl bg-card p-8 transition hover:text-flag hover:ring-1 hover:ring-flag"><BrandIcon slug={b.slug} name={b.name} size={80} /><span dir="ltr" className="font-display text-xs font-bold tracking-widest">{b.name.toUpperCase()}</span><span className="text-sm text-bone/60">{nf(vehicles.filter(v => v.make === b.name).length)} {t.carsCount}</span></a>))}
       </Stagger></div>
   );
 }

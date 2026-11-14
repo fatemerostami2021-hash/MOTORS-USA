@@ -81,7 +81,7 @@ export function AboutView() {
 }
 export function ShopView() {
   const { lang, money } = usePrefs(); const fa = lang === "fa";
-  const T = fa ? { h: "فروشگاه", s: "قاب‌های کلکسیونی از خودروهای محبوب", here: "فروشگاه", note: "قیمت‌ها نمونه هستند. سفارش از طریق واتس‌اپ ثبت می‌شود.", order: "سفارش در واتس‌اپ", print: "قاب کلکسیونی" } : { h: "Shop", s: "Collector prints of iconic cars", here: "Shop", note: "Demo prices. Orders are placed via WhatsApp.", order: "Order on WhatsApp", print: "Collector print" };
+  const T = fa ? { h: "فروشگاه", s: "قاب‌های کلکسیونی از خودروهای محبوب", here: "فروشگاه", note: "قیمت‌ها به دلار آمریکاست. سفارش از طریق واتس‌اپ ثبت می‌شود.", order: "سفارش در واتس‌اپ", print: "قاب کلکسیونی" } : { h: "Shop", s: "Collector prints of iconic cars", here: "Shop", note: "Prices in US dollars. Orders are placed via WhatsApp.", order: "Order on WhatsApp", print: "Collector print" };
   const items = vehicles.filter(v => v.status === "available").slice(0, 8);
   return (
     <>
@@ -99,7 +99,7 @@ export function MediaView() {
     <>
       <PageHero title={fa ? "رسانه" : "Media"} sub={fa ? "ویدیوهای خودروهای ما" : "Videos from our collection"} img="/cars/compare.webp" here={fa ? "رسانه" : "Media"} />
       <div className={`${wrap} py-12`}><Stagger className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{mediaVideos.map(m => (
-        <figure key={m.file} className="overflow-hidden rounded-2xl border border-bone/10 bg-card"><video src={`/video/${m.file}#t=0.5`} controls playsInline preload="metadata" aria-label={m.title} className="aspect-video w-full bg-black object-cover" /><figcaption className="p-4 font-mono font-bold"><bdi dir="ltr">{m.title}</bdi></figcaption></figure>))}</Stagger></div>
+        <figure key={m.file} className="overflow-hidden rounded-2xl border border-bone/10 bg-card"><video src={`/video/${m.file}#t=0.5`} controls playsInline preload="metadata" aria-label={m.title} className="aspect-video w-full bg-black object-contain" /><figcaption className="p-4 font-mono font-bold"><bdi dir="ltr">{m.title}</bdi></figcaption></figure>))}</Stagger></div>
     </>
   );
 }

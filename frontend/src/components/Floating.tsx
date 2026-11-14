@@ -55,7 +55,7 @@ export default function Floating() {
       <div className="fixed bottom-3 end-3 z-[80] flex flex-col items-center gap-2.5 sm:bottom-5 sm:end-5">
         {/* Small, quiet social pill (hidden on phones while the chat is open) */}
         <nav aria-label="Social" className={`${open ? "hidden sm:flex" : "flex"} flex-col items-center gap-0.5 rounded-full border border-bone/15 bg-coal/80 p-1 shadow-lg backdrop-blur`}>
-          {items.filter(([, , href, path]) => !!href && !!path).map(([k, n, href, path, c]) => (
+          {items.filter(([, , href, path]) => !!path && !!href && href !== "#" && !/^https?:\/\/(www\.)?(t\.me|instagram\.com|linkedin\.com)\/?$/.test(href)).map(([k, n, href, path, c]) => (
             <a key={k} href={href} target="_blank" rel="noopener noreferrer" aria-label={n} title={n} style={{ "--c": c } as CSSProperties} className="grid h-8 w-8 place-items-center rounded-full text-bone/60 transition duration-200 hover:bg-bone/10 hover:text-[var(--c)]">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={path} /></svg>
             </a>
