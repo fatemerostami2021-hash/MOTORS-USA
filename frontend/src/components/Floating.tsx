@@ -9,8 +9,6 @@ import { usePrefs } from "./Prefs";
 type Msg = { from: "me" | "bot"; text: string; links?: Reply["links"] };
 
 const INSTAGRAM_URL = "https://www.instagram.com/f.rostamii_web";
-const LINKEDIN_URL = "https://www.linkedin.com/in/fatemeh-rostami963";
-const LINKEDIN_PATH = "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z";
 
 const Headset = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -37,7 +35,6 @@ export default function Floating() {
     ["whatsapp", "WhatsApp", s.whatsapp, sp.whatsapp, "#25D366"],
     ["telegram", "Telegram", s.telegram, sp.telegram, "#26A5E4"],
     ["instagram", "Instagram", INSTAGRAM_URL, sp.instagram, "#E4405F"],
-    ["linkedin", "LinkedIn", LINKEDIN_URL, LINKEDIN_PATH, "#0A66C2"],
   ];
   return (
     <>
@@ -55,7 +52,7 @@ export default function Floating() {
       <div className="fixed bottom-3 end-3 z-[80] flex flex-col items-center gap-2.5 sm:bottom-5 sm:end-5">
         {/* Small, quiet social pill (hidden on phones while the chat is open) */}
         <nav aria-label="Social" className={`${open ? "hidden sm:flex" : "flex"} flex-col items-center gap-0.5 rounded-full border border-bone/15 bg-coal/80 p-1 shadow-lg backdrop-blur`}>
-          {items.filter(([, , href, path]) => !!path && !!href && href !== "#" && !/^https?:\/\/(www\.)?(t\.me|instagram\.com|linkedin\.com)\/?$/.test(href)).map(([k, n, href, path, c]) => (
+          {items.filter(([, , href, path]) => !!path && !!href && href !== "#").map(([k, n, href, path, c]) => (
             <a key={k} href={href} target="_blank" rel="noopener noreferrer" aria-label={n} title={n} style={{ "--c": c } as CSSProperties} className="grid h-8 w-8 place-items-center rounded-full text-bone/60 transition duration-200 hover:bg-bone/10 hover:text-[var(--c)]">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={path} /></svg>
             </a>

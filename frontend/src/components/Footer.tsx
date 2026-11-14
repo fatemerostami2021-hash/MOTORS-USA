@@ -39,7 +39,7 @@ export default function Footer() {
         </div>
         {cols.map(([h, ls]) => <div key={h}><h3 className={col}>{h}</h3><div className="mt-3">{ls.map(([l, href]) => <Link key={href + l} href={href} className={lk}>{l}</Link>)}</div></div>)}
       </div>
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 border-t border-bone/10 px-6 py-4 text-xs tracking-widest text-bone/60 md:px-12"><p className="font-mono">{t.rights}</p><p>{site.credit.name[lang]} · <a href={site.credit.url} target="_blank" rel="noreferrer" className="font-bold text-bone hover:text-flag">{site.credit.role[lang]}</a></p></div>
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 border-t border-bone/10 px-6 py-4 text-xs tracking-widest text-bone/60 md:px-12"><p className="font-mono">{t.rights}</p><button type="button" onClick={() => window.dispatchEvent(new Event("open-cookie-settings"))} className="hover:text-flag">{lang === "fa" ? "تنظیمات کوکی" : "Cookie settings"}</button><p>{site.credit.name[lang]} · <a href={site.credit.url} target="_blank" rel="noreferrer" className="font-bold text-bone hover:text-flag">{site.credit.role[lang]}</a></p></div>
     </footer>
   );
 }

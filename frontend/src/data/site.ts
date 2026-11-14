@@ -15,5 +15,5 @@ export const site = {
   // Hero text (over the video). Set the exact car shown in public/hero.mp4. Leave model empty to show a collection title.
   hero: { brand: "Ferrari", model: "SF90 Stradale", year: 0, href: "/inventory/ferrari-sf90-stradale-2022" },
   // Replace "#" / generic links with your real accounts.
-  socials: { whatsapp: "https://wa.me/989177892994", telegram: "https://t.me/", instagram: "https://www.instagram.com/f.rostamii_web", youtube: "#", tiktok: "#", facebook: "#", x: "#" } as Record<string, string>,
+  socials: { whatsapp: "https://wa.me/989177892994", telegram: "https://t.me/fitness_mindset", instagram: "https://www.instagram.com/f.rostamii_web", youtube: "#", tiktok: "#", facebook: "#", x: "#" } as Record<string, string>,
 };
