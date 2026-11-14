@@ -28,7 +28,7 @@ export default function Footer() {
       <div ref={strip} dir="ltr" className="relative h-20 overflow-hidden border-b border-bone/15">
         <div ref={car} className="absolute bottom-1 h-14 w-40">{img ? <img src="/footer/car.png" alt="" onError={() => setImg(false)} className="h-full object-contain" /> : <CarSvg />}</div>
       </div>
-      <div className="mx-auto grid max-w-6xl gap-8 px-6 py-10 md:grid-cols-[1.4fr_1fr_1fr_1fr] md:px-12">
+      <div className="mx-auto grid max-w-6xl gap-8 px-6 py-10 sm:grid-cols-2 md:px-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div>
           <Logo /><p className="mt-3 max-w-xs text-bone/70">{t.footAbout}</p>
           <p className="mt-5 font-display text-xs tracking-[0.25em] text-bone/50">{t.visit}</p>
@@ -39,7 +39,7 @@ export default function Footer() {
         </div>
         {cols.map(([h, ls]) => <div key={h}><h3 className={col}>{h}</h3><div className="mt-3">{ls.map(([l, href]) => <Link key={href + l} href={href} className={lk}>{l}</Link>)}</div></div>)}
       </div>
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 border-t border-bone/10 px-6 py-4 text-xs tracking-widest text-bone/60 md:px-12"><p className="font-mono">{t.rights}</p><button type="button" onClick={() => window.dispatchEvent(new Event("open-cookie-settings"))} className="hover:text-flag">{lang === "fa" ? "تنظیمات کوکی" : "Cookie settings"}</button><p>{site.credit.name[lang]} · <a href={site.credit.url} target="_blank" rel="noreferrer" className="font-bold text-bone hover:text-flag">{site.credit.role[lang]}</a></p></div>
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 border-t border-bone/10 px-6 py-4 text-xs tracking-widest text-bone/60 md:px-12"><p className="font-mono">{t.rights}</p><button type="button" onClick={() => window.dispatchEvent(new Event("open-cookie-settings"))} className="hover:text-flag">{lang === "fa" ? "تنظیمات کوکی" : "Cookie settings"}</button><button type="button" onClick={() => window.dispatchEvent(new Event("open-install"))} className="hover:text-flag [@media(display-mode:standalone)]:hidden">{lang === "fa" ? "نصب اپلیکیشن" : "Install app"}</button><p>{site.credit.name[lang]} · <a href={site.credit.url} target="_blank" rel="noreferrer" className="font-bold text-bone hover:text-flag">{site.credit.role[lang]}</a></p></div>
     </footer>
   );
 }

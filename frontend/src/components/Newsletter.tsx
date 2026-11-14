@@ -9,7 +9,7 @@ export default function Newsletter() {
   if (path === "/contact" || path === "/sell-your-car") return null;
   return (
     <section className="bg-ink px-6 py-16 md:px-12">
-      <Fade className="mx-auto grid max-w-6xl items-center gap-8 border border-bone/15 bg-coal p-8 md:grid-cols-2 md:p-12">
+      <Fade className="mx-auto grid max-w-6xl items-center gap-8 border border-bone/15 bg-coal p-8 md:p-12 lg:grid-cols-2">
         <div>
           <h2 className="font-heading text-3xl font-bold md:text-4xl">{t.news}</h2>
           <p className="mt-4 text-bone/80">{t.newsText}</p>

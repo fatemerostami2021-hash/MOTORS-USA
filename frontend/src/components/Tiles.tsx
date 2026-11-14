@@ -37,7 +37,7 @@ export default function Tiles() {
   const a = vehicles.filter(v => v.status === "available").length, s = vehicles.filter(v => v.status === "sold").length;
   const items: [string, string, string, string][] = [[t.available, "/inventory", "available-cars", t.availSub(a)], [t.soldCars, "/inventory?status=sold", "sold", t.soldSub(s)], [t.compare, "/compare", "compare", t.cmpSub], [t.brands, "/brands", "brands", t.brandsSub(brands.length)], [t.sell, "/sell-your-car", "sell-your-car", t.sellSub]];
   return (
-    <Stagger className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-6 py-24 md:grid-cols-5 md:px-12">
+    <Stagger className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-6 py-24 sm:grid-cols-3 md:px-12 lg:grid-cols-5">
       {items.map(([title, href, img, sub], i) => <Tile key={href} href={href} img={img} title={title} sub={sub} n={i + 1} />)}
     </Stagger>
   );
